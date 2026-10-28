@@ -1,0 +1,3 @@
+module.exports = {
+  plugins: ["remark-validate-links", "remark-lint-no-dead-urls"],
+};

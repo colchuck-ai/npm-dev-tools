@@ -1,0 +1,40 @@
+{
+  "name": "@engineering/npm-dev-tools",
+  "scripts": {
+    "format": "npm run format:files",
+    "format:files": "prettier --write .",
+    "lint": "npm run lint:files && npm run lint:markdown",
+    "lint:files": "prettier --check .",
+    "lint:markdown": "remark . --quiet --frail",
+    "prepare": "husky"
+  },
+  "peerDependencies": {
+    "@commitlint/cli": "^20.0.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "@semantic-release/exec": "^7.0.0",
+    "@semantic-release/gitlab": "^13.0.0",
+    "conventional-changelog-conventionalcommits": "^9.1.0",
+    "husky": "^9.0.0",
+    "remark": "^15.0.0",
+    "remark-cli": "^12.0.0",
+    "remark-lint": "^10.0.0",
+    "remark-lint-no-dead-urls": "^2.0.0",
+    "remark-validate-links": "^13.0.0",
+    "semantic-release": "^24.0.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.0.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "@semantic-release/exec": "^7.0.0",
+    "@semantic-release/gitlab": "^13.0.0",
+    "conventional-changelog-conventionalcommits": "^9.1.0",
+    "husky": "^9.0.0",
+    "prettier": "^3.6.2",
+    "remark": "^15.0.0",
+    "remark-cli": "^12.0.0",
+    "remark-lint": "^10.0.0",
+    "remark-lint-no-dead-urls": "^2.0.0",
+    "remark-validate-links": "^13.0.0",
+    "semantic-release": "^24.0.0"
+  }
+}

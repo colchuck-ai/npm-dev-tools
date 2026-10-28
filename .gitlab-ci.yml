@@ -1,0 +1,48 @@
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "tag"
+      when: never
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS && $CI_PIPELINE_SOURCE == "push"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH
+
+stages:
+  - test
+  - release
+  - publish
+
+default:
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/node:20
+  before_script:
+    - npm config set @${CI_PROJECT_ROOT_NAMESPACE}:registry=https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/
+    - npm config set -- //${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}
+    - npm install
+
+lint:
+  stage: test
+  script:
+    - npm run lint
+
+release:
+  stage: release
+  rules:
+    - if: $CI_COMMIT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"
+  script:
+    - npx semantic-release
+  artifacts:
+    reports:
+      dotenv: release.env
+
+publish:
+  stage: publish
+  rules:
+    - if: $CI_COMMIT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"
+  script:
+    - |
+      if [ -z "${VERSION}" ]; then
+        echo "No new version to publish. Skipping."
+        exit 0
+      fi
+    - npm pkg set version=${VERSION}
+    - npm publish
